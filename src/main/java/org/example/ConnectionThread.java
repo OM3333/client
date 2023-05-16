@@ -1,5 +1,7 @@
 package org.example;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -9,8 +11,6 @@ public class ConnectionThread extends Thread{
 
     public ConnectionThread(String address, int port) throws IOException {
         socket = new Socket(address,port);
-        System.out.println("Plase login");
-
     }
 
     @Override
@@ -23,7 +23,8 @@ public class ConnectionThread extends Thread{
 
             String message;
             while ((message = reader.readLine()) != null) {
-                System.out.println(message);
+                Message messageIn = Message.fromJson(message);
+                System.out.println(messageIn.text);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -31,6 +32,11 @@ public class ConnectionThread extends Thread{
     }
 
     public void sendMessage(String message){
-        writer.println(message);
+        Message messageOut = new Message("message",message);
+        try {
+            writer.println(messageOut.toJson());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
