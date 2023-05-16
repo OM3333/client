@@ -10,9 +10,15 @@ public class Main {
             ConnectionThread connection = new ConnectionThread("localhost",5000);
             connection.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+            System.out.println("Please login");
+            String login = reader.readLine();
+            Message loginMessage = new Message("login",login);
+            connection.sendMessage(loginMessage);
+
             while(true){
                 String message = reader.readLine();
-                connection.sendMessage(message);
+                connection.sendMessage(new Message("message",message));
             }
 
         } catch (IOException e) {

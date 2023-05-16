@@ -31,12 +31,7 @@ public class ConnectionThread extends Thread{
         }
     }
 
-    public void sendMessage(String message){
-        Message messageOut = new Message("message",message);
-        try {
-            writer.println(messageOut.toJson());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public void sendMessage(Message message){
+        writer.println(message);
     }
 }
